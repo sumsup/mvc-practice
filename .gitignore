@@ -1,0 +1,6 @@
+/.gradle
+/.idea
+/build
+/out
+/webapps/WEB-INF/classes
+/tomcat.8080/
