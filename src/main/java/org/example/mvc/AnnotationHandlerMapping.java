@@ -10,6 +10,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * 여기서 Handler는 Controller를 의미.
+ * HandlerAdapter는 Controller 객체를 사용하기 위한 중간 산출물.
+ */
 public class AnnotationHandlerMapping implements HandlerMapping{
     private final Object[] basePackage;
     private Map<HandlerKey, AnnotationHandler> handlers = new HashMap<>();
@@ -29,18 +33,13 @@ public class AnnotationHandlerMapping implements HandlerMapping{
                         declaredMethod -> {
                             RequestMapping requestMapping = declaredMethod.getDeclaredAnnotation(RequestMapping.class);
 
-                            // @RequestMapping이 붙은 method를 다 가져와서 HanderKey와 Controller 클래스 정보를 담아준다.
-                            Arrays.stream(getRequestMethods(requestMapping))
+                            // @RequestMapping이 붙은 method를 다 가져와서 HandlerKey와 Controller 클래스 정보를 담아준다.
+                            Arrays.stream(requestMapping.method())
                                     .forEach(requestMethod -> handlers.put(
                                             new HandlerKey(requestMethod, requestMapping.value()),
                                             new AnnotationHandler(clazz, declaredMethod)
                                     ));
                         }));
-
-    }
-
-    private RequestMethod[] getRequestMethods(RequestMapping requestMapping) {
-        return requestMapping.method();
     }
 
     @Override
